@@ -2,6 +2,7 @@
 #define _tcp_sockets_h_
 #include <iostream>
 #include <string>
+#include <stdexcept>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -12,7 +13,6 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
-#include <stdexcept>
 
 #define MAXBUFSIZE 1000 // maximium size of buffer
 
@@ -53,7 +53,7 @@ public:
         std::runtime_error(what_arg)
     {};
 
-    ConnectionError(char * what_arg):
+    ConnectionError(char const * what_arg):
         std::runtime_error(std::string(what_arg))
     {};
 };
