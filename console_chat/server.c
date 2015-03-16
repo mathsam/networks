@@ -123,6 +123,7 @@ int main(void)
             }
 
             close(client_fd);
+            printf("connection closed\n");
             exit(0);
         }
 

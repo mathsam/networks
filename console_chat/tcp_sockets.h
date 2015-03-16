@@ -5,7 +5,6 @@
 #include <stdexcept>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <errno.h>
 #include <string.h>
 #include <sys/types.h>
@@ -13,8 +12,10 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <unistd.h>
 
 #define MAXBUFSIZE 1000 // maximium size of buffer
+#define BACKLOG 10 // maximum number of waiting connections in the queue
 
 class ClientSocket{
 public:
@@ -23,9 +24,11 @@ public:
 
     void make_connection();
 
-    char * const recieve();
+    const char * recieve();
 
-    void push(char * data);
+    void push(const char * data);
+
+    void close_connection();
 
     ~ClientSocket();
 
@@ -44,6 +47,48 @@ private:
     int sockfd_;
 
     char buf_[MAXBUFSIZE];
+};
+
+
+class ServerSocket{
+public:
+
+    ServerSocket(const char *port);
+
+    void start_listen();
+
+    void stop_listen();
+
+    ///returns incoming connection's ip addr
+    const char* accept_connection();
+
+    void close_connection();
+
+    const char * recieve();
+
+    void push(const char * data);
+
+    ~ServerSocket();
+
+private:
+
+    ///hide copy constructor
+    ServerSocket(const ServerSocket & socket){};
+
+    ///hide copy assignment constructor
+    ServerSocket & operator=(const ServerSocket & socket){};
+
+    struct addrinfo *server_info_;
+
+    struct addrinfo *work_info_;
+
+    int socklisten_fd_;
+
+    int sockaccept_fd_;
+
+    char buf_[MAXBUFSIZE];
+
+    char accept_ip_[INET6_ADDRSTRLEN];
 };
 
 
