@@ -17,6 +17,11 @@
 #define MAXBUFSIZE 1000 // maximium size of buffer
 #define BACKLOG 10 // maximum number of waiting connections in the queue
 
+/**
+ *@brief a ip socket class allows a client to connect and talk to a server
+ *
+ *@exception ConnectionError
+ */
 class ClientSocket{
 public:
 
@@ -49,6 +54,11 @@ private:
     char buf_[MAXBUFSIZE];
 };
 
+/**
+ *@brief a ip socket class for a server, allowing listenning to a port, accept
+ *       connection and talk to an incoming client
+ *@exception ConnectionError
+ */
 
 class ServerSocket{
 public:

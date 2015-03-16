@@ -9,17 +9,8 @@
 #define MAXLEN 1000
 using namespace std;
 
-
-void read_input_client(char *buf, ClientSocket* psocket){
-    while(strncmp(buf, "quit", 4) !=0){
-        memset(buf, 0, MAXLEN);
-        cin.getline(buf, MAXLEN);
-        psocket->push(buf);
-    }
-    return;
-}
-
-void read_input_server(char *buf, ServerSocket* psocket){
+template <class T>
+void read_input(char *buf, T* psocket){
     while(strncmp(buf, "quit", 4) !=0){
         memset(buf, 0, MAXLEN);
         cin.getline(buf, MAXLEN);
@@ -42,7 +33,7 @@ int main(int argc, char* argv[]){
         ClientSocket myclient(argv[1], argv[2]);
         myclient.make_connection();
      
-        thread client_read(read_input_client, buf, &myclient);  
+        thread client_read(read_input<ClientSocket>, buf, &myclient);  
 
         while(0 != strncmp(buf, "quit", 4)){
            cout << "\t\tThe other says: " << myclient.recieve() << "\n"; 
@@ -57,7 +48,7 @@ int main(int argc, char* argv[]){
         myserver.start_listen();
         myserver.accept_connection();
 
-        thread server_read(read_input_server, buf, &myserver);
+        thread server_read(read_input<ServerSocket>, buf, &myserver);
 
         while(0 != strncmp(buf, "quit", 4)){
             cout << "\t\tThe other says: " << myserver.recieve() << "\n";
